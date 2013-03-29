@@ -1,10 +1,10 @@
-// jQuick - http://www.codingjack.com/playground/jquick/
+// jQuick v. 1.0 - http://www.codingjack.com/playground/jquick/
 // © Jason McElwaine aka CodingJack - http://codecanyon.net/user/CodingJack
 // License: http://creativecommons.org/licenses/by-sa/3.0/deed.en_US
 // 25kb minified, http://www.codingjack.com/playground/jquick/js/jquick.min.js
 
 ;(function() {
-  
+	
 	'use strict';
 	if(window.jQuick) return;
 	
@@ -1422,6 +1422,8 @@
 			
 		},
 		
+		// read or write CSS to a stylesheet
+		// (css:String = null)
 		innerCSS: function(css) {
 			
 			var $this = this.element;
@@ -1769,6 +1771,7 @@
 		
 	};
 	
+	// insert elements into the DOM
 	function insertElement(type, $this, el) {
 		
 		switch(type) {
@@ -1813,6 +1816,7 @@
 		
 	}
 	
+	// grab the native DOM element
 	function grabElement(el) {
 		
 		if(!el) return [];
@@ -1822,6 +1826,7 @@
 		
 	}
 	
+	// called recursively to manipulate groups of elements
 	function filter(a, b, c, d) {
 		
 		var instance = this.cjMigrate;
@@ -1831,6 +1836,7 @@
 		
 	}
 	
+	// checks to see if the jQuick Object has already been applied to an element, otherwise, creates a new one
 	function checkInstance(el) {
 		
 		var instance = el.cjMigrate;
@@ -1840,6 +1846,7 @@
 		
 	}
 	
+	// checks to see if the DOM element is something we can work with
 	function checkNull($this) {
 		
 		if(checkType($this)) return false;
@@ -1859,6 +1866,7 @@
 		
 	}
 	
+	// sorts through different types of selectors
 	function checkSelector(selector, scope) {
 		
 		if(selector === null) return [];
@@ -1916,6 +1924,7 @@
 		
 	}
 	
+	// creates a new element
 	function createDomElement(selector, html) {
 		
 		if(selector.charAt(selector.length - 3) !== ' ') {
@@ -1982,6 +1991,7 @@
 		
 	}
 	
+	// grabs the selector so we can manipulate it
 	function getItem(selector, scope) {
 		
 		if(!scope) scope = doc;
@@ -2020,6 +2030,7 @@
 		
 	}
 	
+	// returns the element's width or height
 	function elementSize($this, prop) {
 		
 		var num = $this['inner' + prop] || $this['client' + prop] || $this['natural' + prop] || $this[prop]; 
@@ -2028,6 +2039,7 @@
 		
 	}
 	
+	// reads or writes the element's size without the padding
 	function size(instance, $this, prop, value) {
 	
 		if(typeof value === 'undefined' || value === true) {
@@ -2089,12 +2101,14 @@
 		
 	}
 	
+	// camel-case a string
 	function upper(st) {
 	
 		return st.charAt(0).toUpperCase() + st.substr(1, st.length - 1);
 		
 	}
 	
+	// attach an event listener
 	function addListener($this, type, func, one) {
 		
 		var events = $this.cjEvents, 
@@ -2170,6 +2184,7 @@
 		
 	}
 	
+	// remove an event listener
 	function removeListener($this, type, evt) {
 		
 		if(modern) {
@@ -2185,6 +2200,7 @@
 		
 	}
 	
+	// remove all event listeners
 	function removeEvents(instance, $this, ns) {
 		
 		instance.removeSwipe();
@@ -2206,6 +2222,7 @@
 		
 	}
 	
+	// sorts through tags, classes or id's
 	function getNode(el, selector, branch) {
 		
 		var type;
@@ -2236,6 +2253,7 @@
 		
 	}
 	
+	// converts a NodeList into an Array of HTMLElements
 	function filterNodes(nodes) {
 	
 		var ar = [];
@@ -2255,6 +2273,7 @@
 		
 	}
 	
+	// checks to see if the element is something we can work with
 	function checkType(obj) {
 		
 		if(obj) return obj === win || obj === doc || obj.nodeType === 1;
@@ -2263,6 +2282,7 @@
 		
 	}
 	
+	// processes closest, prev and next
 	function getElement(el, selector, type, branch) {
 		
 		var obj;
@@ -2333,6 +2353,7 @@
 		
 	}
 	
+	// gets the element's native display value
 	function getDisplay(instance, $this) {
 		
 		var display;
@@ -2384,6 +2405,7 @@
 		
 	}
 	
+	// safely deletes a parameter
 	function removeParam(el, param) {
 	
 		if(!ie8) {
@@ -2399,18 +2421,21 @@
 		
 	}
 	
+	// strips out spaces from a String
 	function stripSpace(st) {
 	
 		return st.replace(/\s+/g, ' ');
 		
 	}
 	
+	// converts a NodeList into an Array of jQuick Objects
 	function buildArray(ar) {
 	
 		ar[ar.length] = checkInstance(this);
 		
 	}
 	
+	// gets called when an event fires
 	function trigger(event) {
 		
 		var instance = this.cjMigrate,
@@ -2461,6 +2486,7 @@
 		
 	}
 	
+	// converts a native CSS property into a camel-case JS property
 	function cssString(st) {
 		
 		var ar = st.split('-'), leg = ar.length;
@@ -2484,6 +2510,7 @@
 		
 	}
 	
+	// gets a CSS value
 	function getValue($this, prop, value) {
 	
 		if(!isNaN(value)) {
@@ -2506,6 +2533,7 @@
 		
 	}
 	
+	// normalizes mouseenter/mouseleave
 	function testMouse(instance, $this, name, callback, event, off) {
 		
 		if(name === 'mouseover') {
@@ -2545,6 +2573,7 @@
 		
 	}
 	
+	// triggers callback when an event fires
 	function callEvent($this, name) {
 		
 		if(modern) {
@@ -2563,6 +2592,7 @@
 		
 	}
 	
+	// triggers an event
 	function triggerEvent($this, name) {
 		
 		if(!(/\./).test(name)) {
@@ -2612,6 +2642,7 @@
 		
 	}
 	
+	// gets the outerWidth or outerHeight of an element
 	function outerSize(instance, $this, size, margin) {
 	
 		var cornerOne, 
@@ -2677,6 +2708,7 @@
 		
 	}
 	
+	// touch start event for left/right swipe
 	function touchStart(event) {
 		
 		var pages = event.touches ? event.touches[0] : event,
@@ -2687,6 +2719,7 @@
 		
 	}
 	
+	// touch move event for left/right swipe
 	function touchMove(event) {
 		
 		var data = this.cjSwipe, newPageX,
@@ -2697,6 +2730,7 @@
 		
 	}
 	
+	// touch end event for left/right swipe
 	function touchEnd() {
 		
 		var data = this.cjSwipe,
@@ -2722,7 +2756,8 @@
 	// **************************************************************
 	// BEGIN ANIMATION ENGINE
 	// **************************************************************
-
+	
+	// RAF ticker
 	function engine() {
 		
 		var run = false, leg = length, itm;
@@ -2769,6 +2804,7 @@
 		
 	}
 	
+	// animation Object
 	function Tween(obj, to, sets) {
 		
 		if(sets.fadeOut) {
@@ -2817,6 +2853,7 @@
 	
 	Tween.prototype = {
 		
+		// cycles through and updates animated properties
 		cycle: function() {
 			
 			var trans = this.transitions;
@@ -2834,6 +2871,7 @@
 			
 		},
 		
+		// stops a tween
 		stop: function(complete, callback, popped) {
 			
 			var element = this.obj;
@@ -2884,6 +2922,7 @@
 		
 	};
 	
+	// simulates a Tween and triggers 'onUpdate' callback on every frame/interval
 	function Tick(obj, sets) {
 		
 		if(!sets || !sets.onUpdate) return;
@@ -2907,12 +2946,14 @@
 	
 	Tick.prototype = {
 		
+		// transition step
 		cycle: function() {
 			
 			return this.transitions();
 			
 		},
 		
+		// stops a Tick tween
 		stop: function(complete, callback, popped, finished) {
 			
 			var obj = this.obj;
@@ -2927,6 +2968,7 @@
 		
 	};
 	
+	// prepares a tween
 	function animation($this, obj, to, sets) {
 	
 		var key, i = 0, 
@@ -2981,6 +3023,7 @@
 		
 	}
 	
+	// function that runs for each animated property
 	function animate(obj, prop, value, duration, ease) {
 		
 		var opacity = prop === 'opacity',
@@ -3081,6 +3124,7 @@
 		
 	}
 	
+	// function that runs for every Tick step
 	function tick(obj, duration, ease, callback) {
 			
 		var tck, timed = 0, then = Date.now(), now;
@@ -3106,6 +3150,7 @@
 		
 	}
 	
+	// sets display for fadeIn/fadeOut
 	function checkElement(instance, element) {
 		
 		if(instance.fadeIn) {
@@ -3122,12 +3167,14 @@
 		
 	}
 	
+	// checks to make sure the RAF ticker gets started
 	function checkEngine() {
 	
 		if(!engineRunning) engine();
 		
 	}
 	
+	// removes a tween from the animation stack
 	function popTween($this, element, callback, params) {
 		
 		dictionary.splice(dictionary.indexOf($this), 1);
@@ -3138,12 +3185,14 @@
 		
 	}
 	
+	// tests for RAF support
 	function timeline(req, st) {
 		
 		return win['webkit' + req + st] || win['moz' + req + st] || win['o' + req + st] || win[req + st] || null;
 		
 	}
 	
+	// writes interval speed for when RAF isn't supported
 	function getSpeed() {
 	
 		if(jQuick.browser() !== 'msie') {
@@ -3159,6 +3208,7 @@
 		
 	}
 	
+	// fallback for IE8
 	if(!Array.indexOf) {
 		
 		Array.prototype.indexOf = function($this) {
@@ -3199,6 +3249,7 @@
 	    
 	}
 	
+	// fallbacks for IE8
 	if(ie8) {
 		
 		Event.prototype.preventDefault = function() {
@@ -3310,3 +3361,12 @@
 	};
 	
 })();
+
+
+
+
+
+
+
+
+
