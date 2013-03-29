@@ -15,4 +15,4 @@
 
 <h3><a href="http://www.codingjack.com/playground/jquick/">View Documentation</a></h3>
 
-<p>jQuick was spawned from being tired of dealing with jQuery conflicts when providing support for plugins I distribute.</p>
+<p>jQuick was spawned from being tired of dealing with jQuery conflicts when providing support for plugins that I distribute.</p>
