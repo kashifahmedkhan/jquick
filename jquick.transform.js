@@ -1,10 +1,10 @@
-// jQuick CSS3 Transform Plugin v. 1.0 - http://www.codingjack.com/playground/jquick/
+// jQuick CSS3 Transform Plugin (beta) - - http://www.codingjack.com/playground/jquick/
 // © Jason McElwaine aka CodingJack - http://codecanyon.net/user/CodingJack
 // License: http://creativecommons.org/licenses/by-sa/3.0/deed.en_US
 // 4kb minified, http://www.codingjack.com/playground/jquick/js/jquick.transform.min.js
 
 ;(function($) {
-  
+	
 	'use strict';
 	
 	var css = $.transitions(),
