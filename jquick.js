@@ -1,7 +1,7 @@
 // jQuick v. 1.0 - http://www.codingjack.com/playground/jquick/
 // © Jason McElwaine aka CodingJack - http://codecanyon.net/user/CodingJack
 // License: http://creativecommons.org/licenses/by-sa/3.0/deed.en_US
-// 25kb minified, http://www.codingjack.com/playground/jquick/js/jquick.min.js
+// 26kb minified, http://www.codingjack.com/playground/jquick/js/jquick.min.js
 
 ;(function() {
 	
@@ -901,7 +901,7 @@
 				
 				if(st) {
 				
-					$this.innerHTML = trim(st.replace(/(<([^>]+)>)/ig, ''));
+					$this.innerHTML = trim(st.toString().replace(/(<([^>]+)>)/ig, ''));
 					
 				}
 				else {
@@ -1169,7 +1169,12 @@
 		// (obj:String/Object = null, value:* = null)
 		data: function(obj, value) {
 			
-			var storage = this.storage || {};
+			var $this = this.element;
+			
+			if($this.cjIsNull) return false;
+			if($this.nodeType !== 1 && $this.length) return filter.apply($this[0], ['data', obj, value]);
+			
+			var storage = $this.cjStorage || {};
 			
 			if(obj) {
 
@@ -1181,7 +1186,7 @@
 						
 					}
 					
-					this.storage = storage;
+					$this.cjStorage = storage;
 					return this;
 					
 				}
@@ -1191,7 +1196,7 @@
 					
 						storage[obj] = value;
 						
-						this.storage = storage;
+						$this.cjStorage = storage;
 						return this;
 						
 					}
@@ -1245,6 +1250,7 @@
 			
 			removeParam($this, 'cjMigrate');
 			removeParam($this, 'cjDisplay');
+			removeParam($this, 'cjStorage');
 			removeParam($this, 'cjIsNull');
 			
 			$this.parentNode.removeChild($this);
@@ -1698,7 +1704,7 @@
 			
 			if(type === 'val') {
 				
-				if(!st) {	
+				if(typeof st === 'undefined') {	
 				
 					return $this.value;
 					
@@ -2052,13 +2058,17 @@
 			
 			if(!value) {
 				
-				if(ie8 && !num && $this.nodeName.toLowerCase() === 'img') {
+				if(!num) {
 					
-					var display = $this.currentStyle['display'];
-					$this.style.display = 'block';
+					var display = compute ? compute($this, null)['display'] : $this.currentStyle['display'];
 					
-					num = elementSize($this, prop);
-					$this.style.display = display;
+					if(display === 'inline' || display === 'hidden') {
+					
+						$this.style.display = 'block';	
+						num = elementSize($this, prop);
+						$this.style.display = display;
+						
+					}	
 					
 				}
 				
