@@ -198,6 +198,8 @@
 					
 				}
 				
+				if(str === 'ms-transform') str = '-ms-transform';
+				
 			}
 			
 			cur = orig = to[key];
