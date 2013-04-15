@@ -17,6 +17,7 @@
 	cancel = timeline('Cancel', 'AnimationFrame'),
 	request = timeline('Request', 'AnimationFrame'),
 	compute = win.getComputedStyle ? win.getComputedStyle : null,
+	opacityIE = 'progid:DXImageTransform.Microsoft.Alpha(opacity=',
 	
 	swipeThreshold = 30,
 	dictionary = [],
@@ -3013,7 +3014,7 @@
 				
 				if(ieAlpha === null) {
 					
-					style.filter = 'progid:DXImageTransform.Microsoft.Alpha(opacity=' + (sets.fadeIn ? 0 : 98) + ')';
+					style.filter = opacityIE + (sets.fadeIn ? 0 : 98) + ')';
 					
 				}
 				
@@ -3039,6 +3040,7 @@
 		var opacity = prop === 'opacity',
 		px = !opacity ? 'px' : 0,
 		timed = 0,
+		ieOpacity,
 		constant,
 		finish,
 		range,
@@ -3060,9 +3062,8 @@
 		}
 		else {
 			
-			style = obj.filters.item('DXImageTransform.Microsoft.Alpha');
-			prop = 'Opacity';
-			tick = style[prop];
+			tick = obj.filters.item('DXImageTransform.Microsoft.Alpha').Opacity;
+			ieOpacity = true;
 			value *= 100;
 			
 		}
@@ -3109,7 +3110,16 @@
 				
 				if(tick >= value) {
 					
-					style[prop] = finish;
+					if(!ieOpacity) {
+					
+						style[prop] = finish;
+						
+					}
+					else {
+					
+						obj.style.filter = opacityIE + finish + ')';
+						
+					}
 					return false;
 					
 				}
@@ -3117,13 +3127,33 @@
 			}
 			else if(tick <= value) {
 				
-				style[prop] = finish;
+				if(!ieOpacity) {
+				
+					style[prop] = finish;
+					
+				}
+				else {
+					
+					obj.style.filter = opacityIE + finish + ')';
+						
+				}
+				
 				return false;
 				
 			}
 			
 			pTick = tick;
-			style[prop] = tick + px;
+			
+			if(!ieOpacity) {
+			
+				style[prop] = tick + px;
+				
+			}
+			else {
+				
+				obj.style.filter = opacityIE + tick + ')';
+				
+			}
 			
 			return true;
 			
