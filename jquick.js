@@ -1984,12 +1984,8 @@
 			
 			st = splits[i].split('=');
 			str = st[1];
-			
-			str = str.substring(1, str.length - 1);
-			num = parseInt(str.substring(1, str.length - 1), 10);
-			
-			if(!isNaN(num)) str = num;
-			el.setAttribute(st[0], str);
+
+			el.setAttribute(st[0], str.substring(1, str.length - 1));
 			
 		}
 		
@@ -3401,12 +3397,3 @@
 	};
 	
 })();
-
-
-
-
-
-
-
-
-
