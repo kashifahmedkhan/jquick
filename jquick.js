@@ -1,7 +1,7 @@
 // jQuick v. 1.0 - http://www.codingjack.com/playground/jquick/
 // © Jason McElwaine aka CodingJack - http://codecanyon.net/user/CodingJack
 // License: http://creativecommons.org/licenses/by-sa/3.0/deed.en_US
-// 26kb minified, http://www.codingjack.com/playground/jquick/js/jquick.min.js
+// 27kb minified, http://www.codingjack.com/playground/jquick/js/jquick.min.js
 
 ;(function() {
 	
@@ -439,7 +439,6 @@
 			if(i < 2) {
 				
 				addListener($this, type, func, one);
-				
 				
 			}
 			else {
@@ -1090,8 +1089,8 @@
 				
 				if(cl) {
 					
-					if(cl.search(st) === -1) {
-					
+					if(cl.indexOf(st) === -1) {
+						
 						$this.className = cl + ' ' + st;
 						
 					}
@@ -1122,11 +1121,18 @@
 			
 			if(cl) {
 				
-				var ar = st.split(' '), i = ar.length;
+				var ar = st.split(' '), i = ar.length, index;
 			
 				while(i--) {
-				
-					if(cl.search(st) !== -1) $this.className = trim(cl.split(st).join(''));
+					
+					st = ar[i];
+					index = cl.indexOf(st);
+					
+					if(index !== -1) {
+						
+						$this.className = cl = trim(cl.substring(0, index) + cl.substring(index + st.length, cl.length));
+						
+					}
 					
 				}
 				
@@ -3397,3 +3403,12 @@
 	};
 	
 })();
+
+
+
+
+
+
+
+
+
