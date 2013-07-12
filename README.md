@@ -2,7 +2,7 @@
 
 <ul>
                     
-    <li>26kb minified</li>
+    <li>27kb minified</li>
     <li>RAF Animation Engine</li>
     <li>Touch Swipe Support</li>
     <li>Preload Google Fonts</li>
