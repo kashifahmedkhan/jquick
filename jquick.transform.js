@@ -117,168 +117,192 @@
 			
 		}
 		
-		var $this = this,
-		apply = function() {animate($this, obj, to, sets);};
-		
 		obj.style.visibility = 'visible';
 		obj.cjTransform = this;
 		
+		this.to = to;
+		this.obj = obj;
+		this.duration = sets.duration || jQuick.defaultDuration;
+		this.ease = (sets.ease || jQuick.defaultEase).toLowerCase().split('.'); 
+		
 		if(!sets.delay) {
 			
-			this.delayed = setTimeout(apply, 30);
+			this.timer(30);
 			
 		}
 		else {
 			
-			this.delayed = setTimeout(apply, sets.delay > 30 ? sets.delay : 30);
+			this.timer(sets.delay > 30 ? sets.delay : 30);
 			
 		}
 		
 	}
 	
-	Transform.prototype.stop = function(callback) {
+	Transform.prototype = {
 		
-		var element = this.obj;
-		
-		if(!element) {
+		timer: function(delay) {
 			
-			clearTimeout(this.delayed);	
-			if(callback) this.onComplete.apply(element, [this.onCompleteParams]);
-		
-			return;
+			var $this = this;
 			
-		}
-		
-		delete element.cjTransform;
-		
-		element.removeEventListener(css, cssEnded, false);  
-		element.className += " cj-tween";
-		element.setAttribute("style", element.getAttribute("style").split(this.moves).join(";").split(";;").join(";"));
-		
-		if(callback) this.onComplete.call(element, this.onCompleteParams);
-		
-	};
-	
-	function animate($this, obj, to, sets) {
-		
-		$this.obj = obj;
-		
-		var j,
-		key,
-		str,
-		cur,
-		orig,
-		bgPos,
-		i = 0,
-		total,  
-		finder,
-		moving,
-		replaced,
-		values = [], 
-		tweens = [], 
-		current = obj.getAttribute('style'),
-		duration = sets.duration || jQuick.defaultDuration,
-		easing = (sets.ease || jQuick.defaultEase).toLowerCase().split('.'); 
-		
-		for(key in to) {
-			
-			if(!to.hasOwnProperty(key)) continue;
-			
-			str = key;
-			finder = str.match(reg);
-			
-			if(finder) {
+			this.delayed = setTimeout(function() {
 				
-				j = finder.length;
+				$this.animate();
+				
+			}, delay);
+			
+		},
+		
+		animate: function() {
+			
+			var j,
+			key,
+			str,
+			cur,
+			orig,
+			bgPos,
+			i = 0,
+			total,  
+			finder,
+			moving,
+			replaced,
+			values = [], 
+			tweens = [],
+			to = this.to, 
+			obj = this.obj,
+			easing = this.ease,
+			duration = this.duration,
+			current = obj.getAttribute('style');
+			
+			for(key in to) {
+				
+				if(!to.hasOwnProperty(key)) continue;
+				
+				str = key;
+				finder = str.match(reg);
+				
+				if(finder) {
 					
-				while(j--) {
+					j = finder.length;
+						
+					while(j--) {
+						
+						cur = finder[j];
+						str = str.replace(new RegExp(cur, 'g'), '-' + cur.toLowerCase());
+						
+					}
 					
-					cur = finder[j];
-					str = str.replace(new RegExp(cur, 'g'), '-' + cur.toLowerCase());
+					if(str === 'ms-transform') str = '-ms-transform';
 					
 				}
 				
-				if(str === 'ms-transform') str = '-ms-transform';
+				cur = orig = to[key];
+				bgPos = key === "backgroundPosition";
 				
-			}
-			
-			cur = orig = to[key];
-			bgPos = key === "backgroundPosition";
-			
-			if(!gotcha.test(cur) && key !== "opacity" && key.search(transformProp) === -1 && !bgPos) {
-				
-				cur += "px;";
-				
-			}
-			else if(!bgPos) {
-				
-				cur += ";";
-				
-			}
-			else {
-			
-				var x = orig.x, y = orig.y, isX = isNaN(x), isY = isNaN(y);
-				
-				if(!isX && !isY) {
-				
-					x += "px";
-					y += "px";
+				if(!gotcha.test(cur) && key !== "opacity" && key.search(transformProp) === -1 && !bgPos) {
+					
+					cur += "px;";
+					
+				}
+				else if(!bgPos) {
+					
+					cur += ";";
 					
 				}
 				else {
 				
-					var val = obj.style.backgroundPosition,
-					tick = (val !== "") ? val.split(" ") : window.getComputedStyle(obj, null).backgroundPosition.split(" ");
+					var x = orig.x, y = orig.y, isX = isNaN(x), isY = isNaN(y);
 					
-					(!isX) ? x += "px" : x = tick[0];
-					(!isY) ? y += "px" : y = tick[1];
+					if(!isX && !isY) {
 					
-				}
-
-				cur = x + " " + y + ";";
-				
-			}
-			
-			values[i] = str + ':' + cur.replace(comma, "{}");
-			tweens[i++] = str;
-			
-			if(!current) continue;
-			finder = current.search(str);
-			
-			if(finder !== -1) {
-				
-				total = current.length - 1;
-				j = finder - 1;
-				
-				while(++j < total) {
+						x += "px";
+						y += "px";
+						
+					}
+					else {
 					
-					if(current[j] === ';') break;
+						var val = obj.style.backgroundPosition,
+						tick = (val !== "") ? val.split(" ") : window.getComputedStyle(obj, null).backgroundPosition.split(" ");
+						
+						(!isX) ? x += "px" : x = tick[0];
+						(!isY) ? y += "px" : y = tick[1];
+						
+					}
+	
+					cur = x + " " + y + ";";
 					
 				}
 				
-				current = current.split(current.substring(finder, j + 1)).join('');
+				values[i] = str + ':' + cur.replace(comma, "{}");
+				tweens[i++] = str;
+				
+				if(!current) continue;
+				finder = current.search(str);
+				
+				if(finder !== -1) {
+					
+					total = current.length - 1;
+					j = finder - 1;
+					
+					while(++j < total) {
+						
+						if(current[j] === ';') break;
+						
+					}
+					
+					current = current.split(current.substring(finder, j + 1)).join('');
+					
+				}
 				
 			}
 			
+			this.moves = moving = skeleton.replace(regP, tweens.toString()).replace(regD, (duration * 0.001).toFixed(2)).replace(regE, ceaserEasing[easing[0]][easing[1]]);
+			
+			replaced = values.toString();
+			replaced = replaced.replace(comma, '');
+			replaced = replaced.replace(dollar, ',');
+			
+			obj.className = obj.className.replace(regT, '');
+			obj.addEventListener(css, cssEnded, false);  
+			obj.setAttribute('style', current.replace(trim, '') + moving + replaced);
+			
+			this.running = true;
+			
+		},
+		
+		stop: function(callback) {
+		
+			var element = this.obj;
+			if(element) delete element.cjTransform;
+			
+			if(!this.running) {
+				
+				clearTimeout(this.delayed);	
+				if(callback) this.onComplete.apply(element, this.onCompleteParams);
+			
+				return;
+				
+			}
+			
+			element.removeEventListener(css, cssEnded, false);  
+			element.className += " cj-tween";
+			element.setAttribute("style", element.getAttribute("style").split(this.moves).join(";").split(";;").join(";"));
+			
+			if(callback) this.onComplete.apply(element, this.onCompleteParams);
+		
 		}
 		
-		$this.moves = moving = skeleton.replace(regP, tweens.toString()).replace(regD, (duration * 0.001).toFixed(2)).replace(regE, ceaserEasing[easing[0]][easing[1]]);
-		
-		replaced = values.toString();
-		replaced = replaced.replace(comma, '');
-		replaced = replaced.replace(dollar, ',');
-		
-		obj.className = obj.className.replace(regT, '');
-		obj.addEventListener(css, cssEnded, false);  
-		obj.setAttribute('style', current.replace(trim, '') + moving + replaced);
-		
-	}
+	};
 	
 	function cssEnded(event) {
 		
 		var $this = this.cjTransform;
 		
-		if($this && event.target === event.currentTarget) $this.stop($this.onComplete);
+		if($this) {
+			
+			if(event.target === event.currentTarget) $this.stop($this.onComplete);
+			$this.running = false;
+			
+		}
 		
 	}
 	
@@ -292,7 +316,7 @@
 			if('transform' in to) {
 					
 				to[transformProp] = to.transform;
-				delete to.transform;
+				if(transformProp !== 'transform') delete to.transform;
 				
 			}
 			
