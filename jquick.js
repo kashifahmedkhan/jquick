@@ -1,11 +1,11 @@
 // jQuick v. 1.0 - http://www.codingjack.com/playground/jquick/
 // © Jason McElwaine aka CodingJack - http://codecanyon.net/user/CodingJack
 // License: http://creativecommons.org/licenses/by-sa/3.0/deed.en_US
-// 27kb minified, http://www.codingjack.com/playground/jquick/js/jquick.min.js
+// 26kb minified, http://www.codingjack.com/playground/jquick/js/jquick.min.js
 
 ;(function() {
 	
-	'use strict';
+	// 'use strict';
 	if(window.jQuick) return;
 	
 	var browser, version,
@@ -2159,6 +2159,7 @@
 				
 				ev = events[i];
 				(ev[1] !== func) ? ar[ar.length] = ev : duplicate = true;
+				if(!modern && !duplicate && ev[0] === type) duplicate = true;
 				
 			}
 			
@@ -2179,7 +2180,7 @@
 			
 		}
 		else if(!duplicate && $this.attachEvent) {
-			
+
 			$this.attachEvent('on' + type, evt.callback);
 			
 		}
@@ -2473,7 +2474,7 @@
 			if(evt[2]) instance.off(name, trigger);
 			
 			if(!instance.googleFonts) {
-			
+
 				evt[1].call(instance, event);
 				
 			}
@@ -2598,7 +2599,7 @@
 				
 		}
 		else {
-			
+
 			$this.fireEvent('on' + name, doc.createEventObject());
 			
 		}
@@ -2634,6 +2635,8 @@
 			ns = name;
 			
 		}
+		
+		
 		
 		while(i--) {
 			
